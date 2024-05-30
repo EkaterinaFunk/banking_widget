@@ -1,5 +1,5 @@
-from src.widget import get_date, hide_card_details
 from src.processing import changing_the_list, sort_data
+from src.widget import get_date, hide_card_details
 
 print(hide_card_details("Visa Platinum 7000792289606361"))
 
