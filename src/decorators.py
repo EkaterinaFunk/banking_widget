@@ -1,8 +1,8 @@
 from functools import wraps
-from typing import Callable, Any, Dict
+from typing import Any, Callable, Dict
 
 
-def log(filename: str = None) -> Callable:
+def log(filename: str | None = None) -> Callable:
     """
     Декоратор, который логирует вызов функции и ее результат в файл или в консоль.
     filename: Путь к файлу для записи логов. Если не задан, то логи выводятся в консоль.
@@ -43,7 +43,7 @@ def log(filename: str = None) -> Callable:
 
 
 @log(filename="mylog.txt")
-def my_function(x, y):
+def my_function(x: int, y: int) -> int:
     return x + y
 
 
