@@ -3,7 +3,7 @@ import pytest
 from src.decorators import log
 
 
-def test_log_with_filename(capsys):
+def test_log_with_filename():
     @log(filename="test_log.txt")
     def test_func(x, y):
         return x + y
@@ -28,7 +28,7 @@ def test_log_without_filename(capsys):
     assert "test_func ok" in captured_output.out
 
 
-def test_log_with_error(capsys):
+def test_log_with_error():
     @log(filename="test_log.txt")
     def test_func(x, y):
         raise ValueError("Error!")

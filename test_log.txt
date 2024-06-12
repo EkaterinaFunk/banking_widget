@@ -1,0 +1,2 @@
+test_func ok
+test_func error: ValueError. Inputs: (1, 2), {}
