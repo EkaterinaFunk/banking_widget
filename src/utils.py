@@ -1,5 +1,4 @@
 import json
-
 from typing import Dict
 
 
@@ -22,19 +21,8 @@ def get_transactions_from_json(json_file: str | None) -> list[Dict]:
             else:
                 return []
     # некорректный файл
-    except json.JSONDecoder:
+    except json.decoder.JSONDecodeError:
         return []
     # файл не найден
     except FileNotFoundError:
         return []
-
-
-if __name__ == "__main__":
-    operations = get_transactions_from_json("../data/operations.json")
-
-    if operations:
-        print("Список транзакций:")
-        for operation in operations:
-            print(operation)
-    else:
-        print("Файл не найден, пустой или содержит некорректный JSON.")

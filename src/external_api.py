@@ -1,11 +1,9 @@
 import os
-import requests
-import json
 
-from typing import Dict
+import requests
 from dotenv import load_dotenv
 
-load_dotenv(".env")
+load_dotenv()
 
 
 def get_transaction_amount_in_rubles(transaction: dict) -> float | None:
@@ -16,19 +14,16 @@ def get_transaction_amount_in_rubles(transaction: dict) -> float | None:
     """
 
     amount = float(transaction["amount"])
-    currency = (transaction["currency"])
+    currency = transaction["currency"]
 
     if currency == "RUB":
         return amount
 
     elif currency != "RUB":
-        API_KEY = os.getenv("API_KEY")
+        api_key = os.getenv("API_KEY")
         url = f"https://api.apilayer.com/exchangerates_data/convert?to=RUB&from={currency}&amount={amount}"
 
-        headers = {
-            "apikey": API_KEY
-        }
-
+        headers = {"apikey": api_key}
         response = requests.get(url, headers=headers)
         response.raise_for_status()
 
