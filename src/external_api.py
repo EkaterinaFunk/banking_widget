@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def get_transaction_amount_in_rubles(transaction: dict) -> float:
+def get_transaction_amount_in_rubles(transaction: dict) -> float | None:
     """
     Функция, которая принимает на вход транзакцию и возвращает сумму транзакции в рублях.
     :param transaction: словарь с данными о транзакции, содержащий ключи 'amount' и 'currency'.
@@ -17,9 +17,9 @@ def get_transaction_amount_in_rubles(transaction: dict) -> float:
     currency = transaction["currency"]
 
     if currency == "RUB":
-        return float(amount)
+        return amount
 
-    elif currency == "USD" or currency == "EUR":
+    elif currency != "RUB":
         api_key = os.getenv("API_KEY")
         url = f"https://api.apilayer.com/exchangerates_data/convert?to=RUB&from={currency}&amount={amount}"
 

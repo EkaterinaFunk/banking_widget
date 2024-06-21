@@ -2,7 +2,7 @@ import json
 from typing import Dict
 
 
-def get_transactions_from_json(json_file: str) -> list[Dict]:
+def get_transactions_from_json(json_file: str | None) -> list[Dict]:
     """
     Функция, которая принимает на вход путь до JSON-файла и
     возвращает список словарей с данными о финансовых транзакциях.

@@ -33,6 +33,6 @@ def test_get_transaction_amount_in_rubles_eur(mock_get):
 @patch("requests.get")
 def test_get_transaction_amount_in_rubles_unknown_currency(mock_get):
     transaction = {"amount": 100, "currency": "JPY"}
-    with unittest.TestCase().assertRaises(ValueError) as context:
+    mock_get.side_effect = requests.exceptions.HTTPError("Неизвестная валюта JPY.")
+    with unittest.TestCase().assertRaises(requests.exceptions.HTTPError):
         get_transaction_amount_in_rubles(transaction)
-        assert "Неизвестная валюта JPY." in str(context.exception)
