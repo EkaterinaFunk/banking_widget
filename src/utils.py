@@ -12,7 +12,7 @@ def get_transactions_from_json(json_file: str) -> list[Dict]:
     """
 
     try:
-        with open("../data/operations.json", encoding="utf-8") as f:
+        with open(json_file, encoding="utf-8") as f:
             data = json.load(f)
 
             # проверяем является ли data списком
