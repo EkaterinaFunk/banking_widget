@@ -1,8 +1,6 @@
 import unittest
 from unittest.mock import patch
 
-import requests
-
 from src.external_api import get_transaction_amount_in_rubles
 
 
