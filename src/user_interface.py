@@ -127,11 +127,11 @@ def print_transactions(transactions: list):
     print("Распечатываю итоговый список транзакций...")
     print("Всего банковских операций в выборке:", len(transactions))
     for i, transaction in enumerate(transactions):
-        account = transaction.get('account', 'Нет информации')
+        check = transaction.get('from', 'Нет информации')
         amount = transaction.get('amount', 0)
         currency = transaction.get('currency', '')
         print(f"{i + 1}. {transaction.get('date', '')} {transaction['description']}"
-              f"\nСчет: {account}\nСумма: {amount} {currency}")
+              f"\nСчет: {check}\nСумма: {amount} {currency}")
     if len(transactions) == 0:
         print("Не найдено ни одной транзакции, подходящей под ваши условия фильтрации")
 
@@ -172,9 +172,9 @@ def main():
             print(f"Программа: Статус операции \"{state}\" недоступен.")
             continue
 
-    sort_by_date = input("Программа: Отсортировать операции по дате? Да/Нет\n").lower()
+    sort_by_date = input("Отсортировать операции по дате? Да/Нет\n").lower()
     if sort_by_date == 'да':
-        sort_order = input("Программа: Отсортировать по возрастанию или по убыванию?\n")
+        sort_order = input("Отсортировать по возрастанию или по убыванию?\n")
         if sort_order.lower() == 'по возрастанию':
             filtered_transactions = sort_transactions(filtered_transactions, 'date')
         elif sort_order.lower() == 'по убыванию':
@@ -182,11 +182,11 @@ def main():
         else:
             print("Некорректный выбор.")
 
-    show_only_rub = input("Программа: Выводить только рублевые транзакции? Да/Нет\n").lower()
+    show_only_rub = input("Выводить только рублевые транзакции? Да/Нет\n").lower()
     if show_only_rub == 'да':
         filtered_transactions = [t for t in filtered_transactions if t.get('currency', '') == 'руб.']
 
-    filter_by_description = input("Программа: Отфильтровать список транзакций по определенному слову "
+    filter_by_description = input("Отфильтровать список транзакций по определенному слову "
                                   "в описании? Да/Нет\n").lower()
     if filter_by_description == 'да':
         search_string = input("Введите слово для фильтрации: ")
