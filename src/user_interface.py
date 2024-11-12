@@ -1,11 +1,12 @@
 import csv
 import json
 import re
+from collections import Counter
 from typing import Any
 
 import pandas as pd
 
-from src.widget import hide_card_details
+from src.widget import get_date, hide_card_details
 
 
 def filter_transactions_by_description(transactions: list, search_string: str) -> list:
@@ -22,7 +23,7 @@ def filter_transactions_by_description(transactions: list, search_string: str) -
     return [t for t in transactions if pattern.search(t["description"])]
 
 
-def count_transactions_by_category(transactions: list, categories: list) -> dict:
+def count_transactions_by_category(transactions: list[dict[str, Any]], categories: list[str]) -> dict[str, int]:
     """
     Функция, которая принимает список словарей с данными о банковских операциях и список категорий операций,
     а возвращает словарь, в котором ключи — это названия категорий,
@@ -34,12 +35,11 @@ def count_transactions_by_category(transactions: list, categories: list) -> dict
     :return: Словарь, в котором ключи — это названия категорий,
     а значения — это количество операций в каждой категории.
     """
-    transaction_counts = {category: 0 for category in categories}
-    for transaction in transactions:
-        for category in categories:
-            if category.lower() in transaction["description"].lower():
-                transaction_counts[category] += 1
-    return transaction_counts
+    category_counts = Counter(
+        category for transaction in transactions for category in categories
+        if category.lower() in transaction["description"].lower()
+    )
+    return {category: count for category, count in category_counts.items()}
 
 
 def load_transactions_from_json(file_path: str) -> list:
@@ -59,7 +59,7 @@ def load_transactions_from_csv(file_path: str) -> list:
     """
     Функция, которая загружает данные о банковских операциях из CSV-файла.
 
-    :param file_path (str): Путь к CSV-файлу.
+    :param file_path: Путь к CSV-файлу.
 
     :return: Список словарей с данными о банковских операциях.
     """
@@ -141,11 +141,12 @@ def print_transactions(transactions: list, typefile: str) -> None:
             elif typefile == "3":
                 amount = transaction.get("amount", 0)
 
+            transaction_date = get_date(transaction.get("date", ""))
             check_from = hide_card_details(transaction.get("from", "Нет информации"))
             check_to = hide_card_details(transaction.get("to", "Нет информации"))
             currency = transaction.get("currency", "")
             print(
-                f"{i + 1}. {transaction.get('date', '')} {transaction['description']}"
+                f"{i + 1}. {transaction_date} {transaction['description']}"
                 f"\nСчет: {check_from} -> {check_to}"
                 f"\nСумма: {amount} {currency}"
             )
@@ -158,10 +159,11 @@ def print_transactions(transactions: list, typefile: str) -> None:
             elif typefile == "3":
                 amount = transaction.get("amount", 0)
 
+            transaction_date = get_date(transaction.get("date", ""))
             check = hide_card_details(transaction.get("to", "Нет информации"))
             currency = transaction.get("currency", "")
             print(
-                f"{i + 1}. {transaction.get('date', '')} {transaction['description']}"
+                f"{i + 1}. {transaction_date} {transaction['description']}"
                 f"\nСчет: {check}"
                 f"\nСумма: {amount} {currency}"
             )
@@ -174,10 +176,11 @@ def print_transactions(transactions: list, typefile: str) -> None:
             elif typefile == "3":
                 amount = transaction.get("amount", 0)
 
+            transaction_date = get_date(transaction.get("date", ""))
             check = transaction.get("from", "Нет информации")
             currency = transaction.get("currency", "")
             print(
-                f"{i + 1}. {transaction.get('date', '')} {transaction['description']}"
+                f"{i + 1}. {transaction_date} {transaction['description']}"
                 f"\nСчет: {check}"
                 f"\nСумма: {amount} {currency}"
             )
